@@ -19,7 +19,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'jdk'
+          distribution: 'adopt'
           java-version: '21'
 
       - name: Cache Gradle dependencies
