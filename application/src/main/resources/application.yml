@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: blog
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    contexts: no-seed-blog
+server:
+  port: 8090
