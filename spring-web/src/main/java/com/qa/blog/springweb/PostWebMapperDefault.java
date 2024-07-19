@@ -10,7 +10,7 @@ import com.qa.blog.core.Tag;
 import java.util.List;
 
 @Component
-public class PostMapperDefault implements PostMapper {
+public class PostWebMapperDefault implements PostWebMapper {
     @Override
     public Post toDomain(PostRequest request) throws BlogException {
         Author author = new Author(null, request.author());

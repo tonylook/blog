@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Import({MariaConfig.class})
 @ComponentScan(basePackages = "com.qa.blog")
 @SpringBootApplication
-@EnableScheduling
 public class BlogApplication {
 
     public static void main(String[] args) {

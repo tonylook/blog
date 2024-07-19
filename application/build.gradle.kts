@@ -1,9 +1,6 @@
 apply {
     plugin("org.springframework.boot")
 }
-
-val cucumberVersion = ""
-val jakartaVersion = ""
 dependencies {
     implementation(project(":core"))
     implementation(project(":mariadb"))

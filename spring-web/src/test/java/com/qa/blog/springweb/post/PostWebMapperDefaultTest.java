@@ -5,7 +5,7 @@ import com.qa.blog.core.Category;
 import com.qa.blog.core.Post;
 import com.qa.blog.core.Tag;
 import com.qa.blog.core.exception.BlogException;
-import com.qa.blog.springweb.PostMapperDefault;
+import com.qa.blog.springweb.PostWebMapperDefault;
 import com.qa.blog.springweb.PostRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class PostMapperDefaultTest {
+class PostWebMapperDefaultTest {
 
     @Test
     void mapCreatePostRequestToDomain() {
@@ -26,7 +26,7 @@ class PostMapperDefaultTest {
 
         PostRequest postRequest = new PostRequest(title, content, authorName, image, categoryName, tags);
 
-        PostMapperDefault underTest = new PostMapperDefault();
+        PostWebMapperDefault underTest = new PostWebMapperDefault();
 
         Post post = underTest.toDomain(postRequest);
 
@@ -55,7 +55,7 @@ class PostMapperDefaultTest {
 
         PostRequest postRequest = new PostRequest(title, content, author, image, category, tags);
 
-        PostMapperDefault underTest = new PostMapperDefault();
+        PostWebMapperDefault underTest = new PostWebMapperDefault();
 
         // Act & Assert
         Assertions.assertThatThrownBy(() -> underTest.toDomain(postRequest))

@@ -3,7 +3,7 @@ package com.qa.blog.springweb.post;
 import com.qa.blog.core.*;
 import com.qa.blog.core.exception.BlogException;
 import com.qa.blog.springweb.PostController;
-import com.qa.blog.springweb.PostMapper;
+import com.qa.blog.springweb.PostWebMapper;
 import com.qa.blog.springweb.PostResponse;
 import com.qa.blog.springweb.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class PostControllerTest {
     private CreatePost createPost;
 
     @MockBean
-    private PostMapper postMapper;
+    private PostWebMapper postWebMapper;
 
 
     @Test
@@ -55,8 +55,8 @@ class PostControllerTest {
         BDDMockito.given(createPost.execute(any()))
             .willReturn(postDomain);
 
-        BDDMockito.given(postMapper.toDomain(any())).willReturn(postDomain);
-        BDDMockito.given(postMapper.toResponse(postDomain)).willReturn(postResponse);
+        BDDMockito.given(postWebMapper.toDomain(any())).willReturn(postDomain);
+        BDDMockito.given(postWebMapper.toResponse(postDomain)).willReturn(postResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/posts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -67,7 +67,7 @@ class PostControllerTest {
                                 "author": "Antonio Alvino",
                                 "image": "http://example.com/image.jpg",
                                 "category": "Tech",
-                                "tags": ["Java", "Programming"]
+                                "tag": ["Java", "Programming"]
                             }
                             """)
                 .accept(MediaType.APPLICATION_JSON))
@@ -75,18 +75,18 @@ class PostControllerTest {
             .andExpect(jsonPath("$.id").value(42L))
             .andExpect(jsonPath("$.title").value("Titolo"))
             .andExpect(jsonPath("$.content").value("Contenuto 123 Prova"))
-            .andExpect(jsonPath("$.author").value("Antonio Alvino"))
+            .andExpect(jsonPath("$.authorEntity").value("Antonio Alvino"))
             .andExpect(jsonPath("$.image").value("http://example.com/image.jpg"))
-            .andExpect(jsonPath("$.category").value("Tech"))
-            .andExpect(jsonPath("$.tags").isArray())
-            .andExpect(jsonPath("$.tags[0]").value("Java"))
-            .andExpect(jsonPath("$.tags[1]").value("Programming"));
+            .andExpect(jsonPath("$.categoryEntity").value("Tech"))
+            .andExpect(jsonPath("$.tagEntities").isArray())
+            .andExpect(jsonPath("$.tagEntities[0]").value("Java"))
+            .andExpect(jsonPath("$.tagEntities[1]").value("Programming"));
     }
 
     @Test
     void createPostWithLongContent() throws Exception {
         String longContent = "a".repeat(1025);
-        BDDMockito.given(postMapper.toDomain(any())).willThrow(new BlogException("BR-1","The content cannot be longer than 1024 characters"));
+        BDDMockito.given(postWebMapper.toDomain(any())).willThrow(new BlogException("BR-1","The content cannot be longer than 1024 characters"));
         mockMvc.perform(MockMvcRequestBuilders.post("/posts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(String.format("""
@@ -96,7 +96,7 @@ class PostControllerTest {
                                 "author": "Antonio Alvino",
                                 "image": "http://example.com/image.jpg",
                                 "category": "Tech",
-                                "tags": ["Java", "Programming"]
+                                "tag": ["Java", "Programming"]
                             }
                             """, longContent))
                 .accept(MediaType.APPLICATION_JSON))
