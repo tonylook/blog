@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.*;
+
 @AutoConfigureWebTestClient
 public class PostSteps extends BaseSteps {
 
@@ -41,7 +43,7 @@ public class PostSteps extends BaseSteps {
             "Default content",
             "http://example.com/default.jpg"
         );
-        resultComponent.post=jpaPostRepository.save(postEntity);
+        resultComponent.post = jpaPostRepository.save(postEntity);
     }
 
     @When("I create a new blog post with the following details:")
@@ -49,7 +51,7 @@ public class PostSteps extends BaseSteps {
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (Map<String, String> columns : rows) {
-            List<String> tagsList = List.of(columns.get("tags").split(", "));
+            List<String> tagsList = List.of(columns.get("tags").split(","));
 
             PostRequest postRequest = new PostRequest(
                 columns.get("title"),
@@ -80,14 +82,14 @@ public class PostSteps extends BaseSteps {
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (Map<String, String> columns : rows) {
-
+            String[] tagsArray = columns.get("tags").split(",");
             resultComponent.actualResponse.expectBody()
                 .jsonPath("$.title").isEqualTo(columns.get("title"))
                 .jsonPath("$.content").isEqualTo(columns.get("content"))
                 .jsonPath("$.author").isEqualTo(columns.get("author"))
                 .jsonPath("$.image").isEqualTo(columns.get("image"))
                 .jsonPath("$.category").isEqualTo(columns.get("category"))
-                .jsonPath("$.tags[0]").isNotEmpty();
+                .jsonPath("$.tags[*]").value(containsInAnyOrder(tagsArray));
         }
     }
 
@@ -97,6 +99,104 @@ public class PostSteps extends BaseSteps {
             .jsonPath("$.errorMessage").isEqualTo(error);
     }
 
-    public record PostRequest(String title, String content, String author, String image, String category, List<String> tags) {
+    @When("I update the blog post to have:")
+    public void iUpdateTheBlogPostToHave(DataTable dataTable) throws Exception {
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        for (Map<String, String> columns : rows) {
+            String jsonPatchString = "[";
+            if (columns.containsKey("title")) {
+                jsonPatchString += "{\"op\": \"replace\", \"path\": \"/title\", \"value\": \"" + columns.get("title") + "\"},";
+            }
+            if (columns.containsKey("content")) {
+                jsonPatchString += "{\"op\": \"replace\", \"path\": \"/content\", \"value\": \"" + columns.get("content") + "\"},";
+            }
+            if (columns.containsKey("author")) {
+                jsonPatchString += "{\"op\": \"replace\", \"path\": \"/author\", \"value\": \"" + columns.get("author") + "\"},";
+            }
+            if (columns.containsKey("image")) {
+                jsonPatchString += "{\"op\": \"replace\", \"path\": \"/image\", \"value\": \"" + columns.get("image") + "\"},";
+            }
+            if (columns.containsKey("category")) {
+                jsonPatchString += "{\"op\": \"replace\", \"path\": \"/category\", \"value\": \"" + columns.get("category") + "\"},";
+            }
+            if (columns.containsKey("tags")) {
+                jsonPatchString += "{\"op\": \"replace\", \"path\": \"/tags\", \"value\": " + new ObjectMapper().writeValueAsString(List.of(columns.get("tags").split(", "))) + "},";
+            }
+            jsonPatchString = jsonPatchString.replaceAll(",$", "") + "]";
+
+            resultComponent.actualResponse = webTestClient.patch().uri("/posts/" + resultComponent.post.getId())
+                .contentType(MediaType.valueOf("application/json-patch+json"))
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(jsonPatchString)
+                .exchange();
+        }
+    }
+
+    @When("I update the blog post to add tag {string}")
+    public void iUpdateTheBlogPostToAddTag(String tag) {
+        PostEntity existingPost = resultComponent.post;
+        String jsonPatchString = "[{\"op\": \"add\", \"path\": \"/tags/-\", \"value\": \"" + tag + "\"}]";
+
+        resultComponent.actualResponse = webTestClient.patch().uri("/posts/" + existingPost.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .bodyValue(jsonPatchString)
+            .exchange();
+    }
+
+    @When("I update the blog post to remove tag {string}")
+    public void iUpdateTheBlogPostToRemoveTags(String tagToRemove) {
+        PostEntity existingPost = resultComponent.post;
+        String jsonPatchString = "[{\"op\": \"remove\", \"path\": \"/tags\", \"value\": \"" + tagToRemove + "\"}]";
+        resultComponent.actualResponse = webTestClient.patch().uri("/posts/" + existingPost.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .bodyValue(jsonPatchString)
+            .exchange();
+    }
+
+
+    @Then("the response should contain the updated blog post with:")
+    public void theResponseShouldContainTheUpdatedBlogPostWith(DataTable dataTable) {
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (Map<String, String> columns : rows) {
+            String[] tagsArray = columns.get("tags").split(",");
+            resultComponent.actualResponse.expectBody()
+                .jsonPath("$.title").isEqualTo(columns.get("title"))
+                .jsonPath("$.content").isEqualTo(columns.get("content"))
+                .jsonPath("$.author").isEqualTo(columns.get("author"))
+                .jsonPath("$.image").isEqualTo(columns.get("image"))
+                .jsonPath("$.category").isEqualTo(columns.get("category"))
+                .jsonPath("$.tags[*]").value(containsInAnyOrder(tagsArray));
+        }
+    }
+
+    @Given("a blog post exists with the following details:")
+    public void aBlogPostExistsWithTheFollowingDetails(DataTable dataTable) {
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        for (Map<String, String> columns : rows) {
+            AuthorEntity authorEntity = new AuthorEntity(null, columns.get("author"));
+            CategoryEntity categoryEntity = new CategoryEntity(null, columns.get("category"));
+            List<String> tagsList = List.of(columns.get("tags").split(", "));
+            Set<TagEntity> tagEntities = new HashSet<>();
+            for (String tag : tagsList) {
+                tagEntities.add(new TagEntity(null, tag));
+            }
+            PostEntity postEntity = new PostEntity(
+                null,
+                authorEntity,
+                categoryEntity,
+                tagEntities,
+                columns.get("title"),
+                columns.get("content"),
+                columns.get("image")
+            );
+            resultComponent.post = jpaPostRepository.save(postEntity);
+        }
+    }
+
+    public record PostRequest(String title, String content, String author, String image, String category,
+                              List<String> tags) {
     }
 }
