@@ -6,6 +6,7 @@ import com.qa.blog.mariadb.CategoryEntity;
 import com.qa.blog.mariadb.PostEntity;
 import com.qa.blog.mariadb.TagEntity;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -70,7 +71,7 @@ public class PostSteps extends BaseSteps {
     }
 
     @Then("the response status code should be {int}")
-    public void the_response_status_code_should_be(int expectedStatus) throws Exception {
+    public void the_response_status_code_should_be(int expectedStatus) {
         resultComponent.actualResponse.expectStatus().isEqualTo(expectedStatus);
     }
 
@@ -89,6 +90,13 @@ public class PostSteps extends BaseSteps {
                 .jsonPath("$.tags[0]").isNotEmpty();
         }
     }
+
+    @And("the response should contain an error message {string}")
+    public void theResponseShouldContainAnErrorMessage(String error) {
+        resultComponent.actualResponse.expectBody()
+            .jsonPath("$.errorMessage").isEqualTo(error);
+    }
+
     public record PostRequest(String title, String content, String author, String image, String category, List<String> tags) {
     }
 }

@@ -1,5 +1,9 @@
 package com.qa.blog.mariadb;
 
+import com.qa.blog.core.Author;
+import com.qa.blog.core.Category;
+import com.qa.blog.core.Post;
+import com.qa.blog.core.Tag;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,13 +13,13 @@ import java.util.stream.Collectors;
 public class PostEntityMapperDefault implements PostEntityMapper {
     @Override
     public com.qa.blog.core.Post toDomain(PostEntity entity) {
-        com.qa.blog.core.Author author = new com.qa.blog.core.Author(entity.getAuthor().getId(), entity.getAuthor().getName());
-        com.qa.blog.core.Category category = new com.qa.blog.core.Category(entity.getCategory().getId(), entity.getCategory().getName());
+        Author author = new Author(entity.getAuthor().getId(), entity.getAuthor().getName());
+        Category category = new Category(entity.getCategory().getId(), entity.getCategory().getName());
         List<com.qa.blog.core.Tag> tags = entity.getTags().stream()
-            .map(tagEntityEntity -> new com.qa.blog.core.Tag(tagEntityEntity.getId(), tagEntityEntity.getName()))
+            .map(tagEntityEntity -> new Tag(tagEntityEntity.getId(), tagEntityEntity.getName()))
             .toList();
 
-        return new com.qa.blog.core.Post(
+        return new Post(
             entity.getId(),
             author,
             category,
@@ -27,7 +31,7 @@ public class PostEntityMapperDefault implements PostEntityMapper {
     }
 
     @Override
-    public PostEntity toEntity(com.qa.blog.core.Post domain) {
+    public PostEntity toEntity(Post domain) {
         AuthorEntity authorEntity = new AuthorEntity(domain.author().id(), domain.author().name());
         CategoryEntity categoryEntity = new CategoryEntity(domain.category().id(), domain.category().name());
         Set<TagEntity> tagEntityEntities = domain.tags().stream()

@@ -18,8 +18,6 @@ public class PostWebMapperDefault implements PostWebMapper {
         List<Tag> tags = request.tags().stream()
             .map(tag -> new Tag(null, tag))
             .toList();
-
-        try {
             return new Post(
                 null,
                 author,
@@ -29,10 +27,6 @@ public class PostWebMapperDefault implements PostWebMapper {
                 request.content(),
                 request.image()
             );
-        } catch (BlogException e) {
-            System.out.println(e.getErrorCode() + e.getMessage());
-        }
-        return null;
     }
 
     @Override
