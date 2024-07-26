@@ -1,8 +1,6 @@
 package com.qa.blog.application;
 
-import com.qa.blog.core.CreatePost;
-import com.qa.blog.core.CreatePostDefault;
-import com.qa.blog.core.PostRepository;
+import com.qa.blog.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,5 +10,15 @@ public class ApplicationConfig {
     @Bean
     public CreatePost createPost(PostRepository postRepository) {
         return new CreatePostDefault(postRepository);
+    }
+
+    @Bean
+    public UpdatePost updatePost(PostRepository postRepository) {
+        return new UpdatePostDefault(postRepository);
+    }
+
+    @Bean
+    public FindPost findPost(PostRepository postRepository) {
+        return new FindPostDefault(postRepository);
     }
 }

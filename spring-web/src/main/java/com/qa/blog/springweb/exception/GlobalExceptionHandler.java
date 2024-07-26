@@ -1,6 +1,7 @@
 package com.qa.blog.springweb.exception;
 
 import com.qa.blog.core.exception.BlogException;
+import com.qa.blog.core.exception.PostNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,5 +17,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleApiException(BlogException blogException) {
         logger.atInfo().log(blogException.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDetails(blogException.getErrorCode(), blogException.getErrorMessage()));
+    }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleNotFoundException(PostNotFoundException postNotFoundException) {
+        logger.atInfo().log(postNotFoundException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDetails("404", postNotFoundException.getMessage()));
     }
 }

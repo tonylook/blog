@@ -1,9 +1,9 @@
 package com.qa.blog.core;
 
+import com.qa.blog.core.exception.BlogErrorCode;
 import com.qa.blog.core.exception.BlogException;
 
 import java.util.List;
-
 public record Post(Long id,
                    Author author,
                    Category category,
@@ -13,10 +13,10 @@ public record Post(Long id,
                    String image) {
     public Post{
         if(content.length()>1024){
-            throw new BlogException ("BR-1","The content cannot be longer than 1024 characters");
+            throw new BlogException (BlogErrorCode.CONTENT_TOO_LONG.getCode(), BlogErrorCode.CONTENT_TOO_LONG.getMessage());
         }
         if(title==null || title.isBlank()){
-            throw new BlogException ("BR-2","Title is required");
+            throw new BlogException (BlogErrorCode.TITLE_REQUIRED.getCode(), BlogErrorCode.TITLE_REQUIRED.getMessage());
         }
     }
 }

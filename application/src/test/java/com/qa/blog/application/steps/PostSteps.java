@@ -6,6 +6,7 @@ import com.qa.blog.mariadb.CategoryEntity;
 import com.qa.blog.mariadb.PostEntity;
 import com.qa.blog.mariadb.TagEntity;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -22,7 +23,10 @@ import static org.hamcrest.Matchers.*;
 
 @AutoConfigureWebTestClient
 public class PostSteps extends BaseSteps {
-
+    @After
+    public void afterEachScenario() {
+        deleteDatabase();
+    }
     @Given("the {string} category and the {string} author exist:")
     public void theCategoryAndTheAuthorExist(String categoria, String autore) {
         AuthorEntity authorEntity = new AuthorEntity(null, autore);
@@ -64,7 +68,7 @@ public class PostSteps extends BaseSteps {
 
             String requestBody = new ObjectMapper().writeValueAsString(postRequest);
 
-            resultComponent.actualResponse = webTestClient.post().uri("/posts")
+            resultComponent.actualResponse = webTestClient.post().uri("/post")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(requestBody)
@@ -120,11 +124,11 @@ public class PostSteps extends BaseSteps {
                 jsonPatchString += "{\"op\": \"replace\", \"path\": \"/category\", \"value\": \"" + columns.get("category") + "\"},";
             }
             if (columns.containsKey("tags")) {
-                jsonPatchString += "{\"op\": \"replace\", \"path\": \"/tags\", \"value\": " + new ObjectMapper().writeValueAsString(List.of(columns.get("tags").split(", "))) + "},";
+                jsonPatchString += "{\"op\": \"replace\", \"path\": \"/tags\", \"value\": " + new ObjectMapper().writeValueAsString(List.of(columns.get("tags").split(","))) + "},";
             }
             jsonPatchString = jsonPatchString.replaceAll(",$", "") + "]";
 
-            resultComponent.actualResponse = webTestClient.patch().uri("/posts/" + resultComponent.post.getId())
+            resultComponent.actualResponse = webTestClient.patch().uri("/post/" + resultComponent.post.getId())
                 .contentType(MediaType.valueOf("application/json-patch+json"))
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(jsonPatchString)
@@ -137,8 +141,8 @@ public class PostSteps extends BaseSteps {
         PostEntity existingPost = resultComponent.post;
         String jsonPatchString = "[{\"op\": \"add\", \"path\": \"/tags/-\", \"value\": \"" + tag + "\"}]";
 
-        resultComponent.actualResponse = webTestClient.patch().uri("/posts/" + existingPost.getId())
-            .contentType(MediaType.APPLICATION_JSON)
+        resultComponent.actualResponse = webTestClient.patch().uri("/post/" + existingPost.getId())
+            .contentType(MediaType.valueOf("application/json-patch+json"))
             .accept(MediaType.APPLICATION_JSON)
             .bodyValue(jsonPatchString)
             .exchange();
@@ -147,9 +151,9 @@ public class PostSteps extends BaseSteps {
     @When("I update the blog post to remove tag {string}")
     public void iUpdateTheBlogPostToRemoveTags(String tagToRemove) {
         PostEntity existingPost = resultComponent.post;
-        String jsonPatchString = "[{\"op\": \"remove\", \"path\": \"/tags\", \"value\": \"" + tagToRemove + "\"}]";
-        resultComponent.actualResponse = webTestClient.patch().uri("/posts/" + existingPost.getId())
-            .contentType(MediaType.APPLICATION_JSON)
+        String jsonPatchString = "[{\"op\": \"remove\", \"path\": \"/tags/-\", \"value\": \"" + tagToRemove + "\"}]";
+        resultComponent.actualResponse = webTestClient.patch().uri("/post/" + existingPost.getId())
+            .contentType(MediaType.valueOf("application/json-patch+json"))
             .accept(MediaType.APPLICATION_JSON)
             .bodyValue(jsonPatchString)
             .exchange();
@@ -178,7 +182,7 @@ public class PostSteps extends BaseSteps {
         for (Map<String, String> columns : rows) {
             AuthorEntity authorEntity = new AuthorEntity(null, columns.get("author"));
             CategoryEntity categoryEntity = new CategoryEntity(null, columns.get("category"));
-            List<String> tagsList = List.of(columns.get("tags").split(", "));
+            List<String> tagsList = List.of(columns.get("tags").split(","));
             Set<TagEntity> tagEntities = new HashSet<>();
             for (String tag : tagsList) {
                 tagEntities.add(new TagEntity(null, tag));

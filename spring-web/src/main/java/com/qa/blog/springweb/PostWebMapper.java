@@ -4,5 +4,6 @@ import com.qa.blog.core.Post;
 
 public interface PostWebMapper {
     Post toDomain(PostRequest post);
-    PostResponse toResponse(Post post);
+    PostDTO toDTO(Post post);
+    Post toDomain(PostDTO postDTO);
 }

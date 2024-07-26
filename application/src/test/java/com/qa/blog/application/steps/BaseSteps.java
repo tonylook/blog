@@ -6,7 +6,6 @@ import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -25,4 +24,7 @@ public class BaseSteps extends ContainerBase {
     @Autowired
     protected ResultComponent resultComponent;
 
+    protected void deleteDatabase() {
+        jpaPostRepository.deleteAll();
+    }
 }

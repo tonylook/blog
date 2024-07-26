@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class PostEntityMapperDefault implements PostEntityMapper {
     @Override
-    public com.qa.blog.core.Post toDomain(PostEntity entity) {
+    public Post toDomain(PostEntity entity) {
         Author author = new Author(entity.getAuthor().getId(), entity.getAuthor().getName());
         Category category = new Category(entity.getCategory().getId(), entity.getCategory().getName());
         List<com.qa.blog.core.Tag> tags = entity.getTags().stream()

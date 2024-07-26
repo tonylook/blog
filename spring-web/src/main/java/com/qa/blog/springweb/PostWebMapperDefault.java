@@ -30,8 +30,27 @@ public class PostWebMapperDefault implements PostWebMapper {
     }
 
     @Override
-    public PostResponse toResponse(Post post) {
-        return new PostResponse(
+    public Post toDomain(PostDTO postDTO) throws BlogException {
+        Author author = new Author(null, postDTO.author());
+        Category category = new Category(null, postDTO.category());
+        List<Tag> tags = postDTO.tags().stream()
+            .map(tag -> new Tag(null, tag))
+            .toList();
+        return new Post(
+            postDTO.id(),
+            author,
+            category,
+            tags,
+            postDTO.title(),
+            postDTO.content(),
+            postDTO.image()
+        );
+    }
+
+
+    @Override
+    public PostDTO toDTO(Post post) {
+        return new PostDTO(
             post.id(),
             post.author().name(),
             post.category().name(),
