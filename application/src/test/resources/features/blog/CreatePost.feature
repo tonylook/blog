@@ -10,7 +10,7 @@ Feature: Create a blog post
       | title   | content                             | author      | image                        | category   | tags      |
       | My Post | This is the content of my new post. | Mario Fusco | http://example.com/image.jpg | Technology | tag1,tag2 |
     Then the response status code should be 201
-    And the response should contain the new blog post with:
+    And the response should contain:
       | title   | content                             | author      | image                        | category   | tags      |
       | My Post | This is the content of my new post. | Mario Fusco | http://example.com/image.jpg | Technology | tag1,tag2 |
 
@@ -33,6 +33,6 @@ Feature: Create a blog post
       | title   | content                             | author      | image | category   | tags      |
       | My Post | This is the content of my new post. | Mario Fusco |       | Technology | tag1,tag2 |
     Then the response status code should be 201
-    And the response should contain the new blog post with:
+    And the response should contain:
       | title   | content                             | author      | image | category   | tags      |
       | My Post | This is the content of my new post. | Mario Fusco |       | Technology | tag1,tag2 |

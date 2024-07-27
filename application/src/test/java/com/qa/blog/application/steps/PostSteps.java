@@ -81,7 +81,7 @@ public class PostSteps extends BaseSteps {
         resultComponent.actualResponse.expectStatus().isEqualTo(expectedStatus);
     }
 
-    @Then("the response should contain the new blog post with:")
+    @Then("the response should contain:")
     public void the_response_should_contain_the_new_blog_post_with(DataTable dataTable) {
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
@@ -159,24 +159,7 @@ public class PostSteps extends BaseSteps {
             .exchange();
     }
 
-
-    @Then("the response should contain the updated blog post with:")
-    public void theResponseShouldContainTheUpdatedBlogPostWith(DataTable dataTable) {
-        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
-
-        for (Map<String, String> columns : rows) {
-            String[] tagsArray = columns.get("tags").split(",");
-            resultComponent.actualResponse.expectBody()
-                .jsonPath("$.title").isEqualTo(columns.get("title"))
-                .jsonPath("$.content").isEqualTo(columns.get("content"))
-                .jsonPath("$.author").isEqualTo(columns.get("author"))
-                .jsonPath("$.image").isEqualTo(columns.get("image"))
-                .jsonPath("$.category").isEqualTo(columns.get("category"))
-                .jsonPath("$.tags[*]").value(containsInAnyOrder(tagsArray));
-        }
-    }
-
-    @Given("a blog post exists with the following details:")
+    @Given("the following blog posts exist:")
     public void aBlogPostExistsWithTheFollowingDetails(DataTable dataTable) {
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         for (Map<String, String> columns : rows) {
@@ -198,6 +181,48 @@ public class PostSteps extends BaseSteps {
             );
             resultComponent.post = jpaPostRepository.save(postEntity);
         }
+    }
+
+    @When("I search for blog posts with title {string}")
+    public void iSearchForBlogPostsWithTitle(String title) {
+        resultComponent.actualResponse = webTestClient.get()
+            .uri(uriBuilder -> uriBuilder
+                .path("/post")
+                .queryParam("title", title)
+                .build())
+            .exchange();
+    }
+
+    @When("I search for blog posts with category {string}")
+    public void iSearchForBlogPostsWithCategory(String category) {
+        resultComponent.actualResponse = webTestClient.get()
+            .uri(uriBuilder -> uriBuilder
+                .path("/post")
+                .queryParam("category", category)
+                .build())
+            .exchange();
+    }
+
+    @When("I search for blog posts with tags {string}")
+    public void iSearchForBlogPostsWithTags(String tags) {
+        resultComponent.actualResponse = webTestClient.get()
+            .uri(uriBuilder -> uriBuilder
+                .path("/post")
+                .queryParam("tags", tags)
+                .build())
+            .exchange();
+    }
+
+    @When("I search for blog posts with title {string}, category {string}, and tags {string}")
+    public void iSearchForBlogPostsWithTitleCategoryAndTags(String title, String category, String tags) {
+        resultComponent.actualResponse = webTestClient.get()
+            .uri(uriBuilder -> uriBuilder
+                .path("/posts")
+                .queryParam("title", title)
+                .queryParam("category", category)
+                .queryParam("tags", tags)
+                .build())
+            .exchange();
     }
 
     public record PostRequest(String title, String content, String author, String image, String category,

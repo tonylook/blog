@@ -3,7 +3,7 @@ Feature: Update a blog post
   I want to update an existing blog post
 
   Background:
-    Given a blog post exists with the following details:
+    Given the following blog posts exist:
       | title              | content                                              | author           | image                                     | category        | tags                               |
       | Clean Architecture | A Craftsman's Guide to Software Structure and Design | Robert C. Martin | http://example.com/clean_architecture.jpg | Software Design | Clean Architecture,Software Design |
 
@@ -12,7 +12,7 @@ Feature: Update a blog post
       | title                        | content                     | author         | image                            | category             | tags                                              |
       | Clean Architecture - Updated | This is the updated content | Antonio Alvino | http://example.com/new-image.jpg | Software Engineering | Clean Architecture,Software Design,Best Practices |
     Then the response status code should be 200
-    And the response should contain the updated blog post with:
+    And the response should contain:
       | title                        | content                     | author         | image                            | category             | tags                                              |
       | Clean Architecture - Updated | This is the updated content | Antonio Alvino | http://example.com/new-image.jpg | Software Engineering | Clean Architecture,Software Design,Best Practices |
 
@@ -21,7 +21,7 @@ Feature: Update a blog post
       | title                                  |
       | Clean Architecture - Partially Updated |
     Then the response status code should be 200
-    And the response should contain the updated blog post with:
+    And the response should contain:
       | title                                  | content                                              | author           | image                                     | category        | tags                               |
       | Clean Architecture - Partially Updated | A Craftsman's Guide to Software Structure and Design | Robert C. Martin | http://example.com/clean_architecture.jpg | Software Design | Clean Architecture,Software Design |
 
@@ -30,14 +30,14 @@ Feature: Update a blog post
       | category         |
       | Computer Science |
     Then the response status code should be 200
-    And the response should contain the updated blog post with:
+    And the response should contain:
       | title              | content                                              | author           | image                                     | category         | tags                               |
       | Clean Architecture | A Craftsman's Guide to Software Structure and Design | Robert C. Martin | http://example.com/clean_architecture.jpg | Computer Science | Clean Architecture,Software Design |
 
   Scenario: Add tags to a blog post
     When I update the blog post to add tag "Best Practices"
     Then the response status code should be 200
-    And the response should contain the updated blog post with:
+    And the response should contain:
       | title              | content                                              | author           | image                                     | category        | tags                                              |
       | Clean Architecture | A Craftsman's Guide to Software Structure and Design | Robert C. Martin | http://example.com/clean_architecture.jpg | Software Design | Clean Architecture,Software Design,Best Practices |
 
