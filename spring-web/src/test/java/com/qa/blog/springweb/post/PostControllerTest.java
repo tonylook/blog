@@ -43,6 +43,12 @@ class PostControllerTest {
     private FindPostById findPostById;
 
     @MockBean
+    private DeletePostById deletePostById;
+
+    @MockBean
+    private SearchPosts searchPosts;
+
+    @MockBean
     private PostWebMapper postWebMapper;
 
 
