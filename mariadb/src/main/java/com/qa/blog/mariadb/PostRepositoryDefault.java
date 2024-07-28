@@ -41,4 +41,9 @@ public class PostRepositoryDefault implements PostRepository {
         return postEntities.stream().map(postEntityMapper::toDomain).toList();
     }
 
+    @Override
+    public void deleteById(Long id) {
+        jpaPostRepository.deleteById(id);
+    }
+
 }

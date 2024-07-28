@@ -21,14 +21,16 @@ public class PostController {
     private final UpdatePost updatePost;
     private final FindPostById findPostById;
     private final SearchPosts searchPosts;
+    private final DeletePostById deletePostById;
     private final PostWebMapper postWebMapper;
     private final ObjectMapper objectMapper;
 
-    public PostController(CreatePost createPost, UpdatePost updatePost, FindPostById findPostById, SearchPosts searchPosts, PostWebMapper postWebMapper, ObjectMapper objectMapper) {
+    public PostController(CreatePost createPost, UpdatePost updatePost, FindPostById findPostById, SearchPosts searchPosts, DeletePostById deletePostById, PostWebMapper postWebMapper, ObjectMapper objectMapper) {
         this.createPost = createPost;
         this.updatePost = updatePost;
         this.findPostById = findPostById;
         this.searchPosts = searchPosts;
+        this.deletePostById = deletePostById;
         this.postWebMapper = postWebMapper;
         this.objectMapper = objectMapper;
     }
@@ -70,6 +72,12 @@ public class PostController {
             .toList();
 
         return ResponseEntity.ok(postDTOs);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deletePost(@PathVariable("id") Long id) {
+        deletePostById.execute(id);
+        return ResponseEntity.noContent().build();
     }
 
     private Post getPatchedPost(JsonNode patch, Post existingPost) throws JsonProcessingException {

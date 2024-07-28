@@ -1,6 +1,8 @@
 package com.qa.blog.application;
 
 import com.qa.blog.core.*;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,5 +27,15 @@ public class ApplicationConfig {
     @Bean
     public SearchPosts searchPosts(PostRepository postRepository) {
         return new SearchPostsDefault(postRepository);
+    }
+
+    @Bean
+    public DeletePostById deletePostById(PostRepository postRepository) {
+        return new DeletePostByIdDefault(postRepository);
+    }
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI().info(new Info().title("QA Blog").version("undefined"));
     }
 }

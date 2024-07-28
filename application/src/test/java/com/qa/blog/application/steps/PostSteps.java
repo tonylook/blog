@@ -20,9 +20,12 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @AutoConfigureWebTestClient
 public class PostSteps extends BaseSteps {
+    private String userType;
+
     @After
     public void afterEachScenario() {
         deleteDatabase();
@@ -229,6 +232,25 @@ public class PostSteps extends BaseSteps {
     public void theResponseShouldContainResults(int postsQuantity) {
         resultComponent.actualResponse.expectBody()
             .jsonPath("$.length()").isEqualTo(postsQuantity);
+    }
+
+    @Given("I am an {string}")
+    public void iAmAn(String userType) {
+        this.userType = userType;
+    }
+
+    @When("I delete the blog post")
+    public void iDeleteTheBlogPost() {
+        resultComponent.actualResponse = webTestClient.delete()
+            .uri("/post/" + resultComponent.post.getId())
+            .header("X-user", userType)
+            .exchange();
+    }
+
+    @Then("the blog post should no longer exist")
+    public void theBlogPostShouldNoLongerExist() {
+        boolean postExists = jpaPostRepository.existsById(resultComponent.post.getId());
+        assertFalse(postExists, "The blog post should no longer exist");
     }
 
     public record PostRequest(String title, String content, String author, String image, String category,

@@ -22,6 +22,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PostNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleNotFoundException(PostNotFoundException postNotFoundException) {
         logger.atInfo().log(postNotFoundException.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDetails("404", postNotFoundException.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDetails("404", postNotFoundException.getMessage()));
     }
 }

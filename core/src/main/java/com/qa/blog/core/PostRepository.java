@@ -6,4 +6,5 @@ public interface PostRepository {
     Post save(Post post);
     Post findById(Long id);
     List<Post> findByTitleAndCategoryAndTags (String title, String category, List<String> tags);
+    void deleteById(Long id);
 }
