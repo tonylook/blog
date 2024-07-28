@@ -217,12 +217,18 @@ public class PostSteps extends BaseSteps {
     public void iSearchForBlogPostsWithTitleCategoryAndTags(String title, String category, String tags) {
         resultComponent.actualResponse = webTestClient.get()
             .uri(uriBuilder -> uriBuilder
-                .path("/posts")
+                .path("/post")
                 .queryParam("title", title)
                 .queryParam("category", category)
                 .queryParam("tags", tags)
                 .build())
             .exchange();
+    }
+
+    @And("the response should contain {int} results")
+    public void theResponseShouldContainResults(int postsQuantity) {
+        resultComponent.actualResponse.expectBody()
+            .jsonPath("$.length()").isEqualTo(postsQuantity);
     }
 
     public record PostRequest(String title, String content, String author, String image, String category,

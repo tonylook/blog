@@ -1,5 +1,5 @@
 package com.qa.blog.core;
 
-public interface FindPost {
+public interface FindPostById {
     Post execute(Long id);
 }

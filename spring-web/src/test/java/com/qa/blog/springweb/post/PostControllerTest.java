@@ -40,7 +40,7 @@ class PostControllerTest {
     private UpdatePost updatePost;
 
     @MockBean
-    private FindPost findPost;
+    private FindPostById findPostById;
 
     @MockBean
     private PostWebMapper postWebMapper;

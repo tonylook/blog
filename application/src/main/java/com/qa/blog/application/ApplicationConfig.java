@@ -18,7 +18,12 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public FindPost findPost(PostRepository postRepository) {
-        return new FindPostDefault(postRepository);
+    public FindPostById findPost(PostRepository postRepository) {
+        return new FindPostByIdDefault(postRepository);
+    }
+
+    @Bean
+    public SearchPosts searchPosts(PostRepository postRepository) {
+        return new SearchPostsDefault(postRepository);
     }
 }

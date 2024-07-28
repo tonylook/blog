@@ -1,9 +1,9 @@
 package com.qa.blog.core;
 
-public class FindPostDefault implements FindPost{
+public class FindPostByIdDefault implements FindPostById {
     private final PostRepository postRepository;
 
-    public FindPostDefault(PostRepository postRepository) {
+    public FindPostByIdDefault(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
