@@ -1,4 +1,4 @@
-package com.qa.blog.springweb;
+package com.qa.blog.springweb.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qa.blog.springweb.exception.ErrorDetails;

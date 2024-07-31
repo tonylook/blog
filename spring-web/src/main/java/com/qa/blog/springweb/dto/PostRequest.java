@@ -1,4 +1,4 @@
-package com.qa.blog.springweb;
+package com.qa.blog.springweb.dto;
 
 import java.util.List;
 

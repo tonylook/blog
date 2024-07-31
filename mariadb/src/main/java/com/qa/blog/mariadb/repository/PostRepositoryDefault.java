@@ -1,8 +1,10 @@
-package com.qa.blog.mariadb;
+package com.qa.blog.mariadb.repository;
 
-import com.qa.blog.core.Post;
+import com.qa.blog.core.domain.Post;
 import com.qa.blog.core.PostRepository;
 import com.qa.blog.core.exception.PostNotFoundException;
+import com.qa.blog.mariadb.entity.PostEntity;
+import com.qa.blog.mariadb.mapper.PostEntityMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

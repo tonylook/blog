@@ -1,4 +1,4 @@
-package com.qa.blog.core;
+package com.qa.blog.core.domain;
 
 import com.qa.blog.core.exception.BlogErrorCode;
 import com.qa.blog.core.exception.BlogException;

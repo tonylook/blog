@@ -1,17 +1,18 @@
-package com.qa.blog.springweb;
+package com.qa.blog.springweb.mapper;
 
-import com.qa.blog.core.Author;
-import com.qa.blog.core.Category;
+import com.qa.blog.core.domain.Author;
+import com.qa.blog.core.domain.Category;
 import com.qa.blog.core.exception.BlogException;
+import com.qa.blog.springweb.dto.PostDTO;
+import com.qa.blog.springweb.dto.PostRequest;
 import org.springframework.stereotype.Component;
-import com.qa.blog.core.Post;
-import com.qa.blog.core.Tag;
+import com.qa.blog.core.domain.Post;
+import com.qa.blog.core.domain.Tag;
 
 import java.util.List;
 
 @Component
-public class PostWebMapperDefault implements PostWebMapper {
-    @Override
+public class PostWebMapper {
     public Post toDomain(PostRequest request) throws BlogException {
         Author author = new Author(null, request.author());
         Category category = new Category(null, request.category());
@@ -29,7 +30,6 @@ public class PostWebMapperDefault implements PostWebMapper {
             );
     }
 
-    @Override
     public Post toDomain(PostDTO postDTO) throws BlogException {
         Author author = new Author(null, postDTO.author());
         Category category = new Category(null, postDTO.category());
@@ -48,7 +48,6 @@ public class PostWebMapperDefault implements PostWebMapper {
     }
 
 
-    @Override
     public PostDTO toDTO(Post post) {
         return new PostDTO(
             post.id(),

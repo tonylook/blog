@@ -1,4 +1,4 @@
-package com.qa.blog.mariadb;
+package com.qa.blog.mariadb.entity;
 
 import jakarta.persistence.*;
 

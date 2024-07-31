@@ -1,4 +1,6 @@
-package com.qa.blog.core;
+package com.qa.blog.core.usecase;
+
+import com.qa.blog.core.PostRepository;
 
 public class DeletePostByIdDefault implements DeletePostById {
     private final PostRepository postRepository;

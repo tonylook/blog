@@ -1,10 +1,10 @@
-package com.qa.blog.mariadb;
+package com.qa.blog.mariadb.entity;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "authors")
-public class AuthorEntity {
+@Table(name = "categories")
+public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,9 +13,9 @@ public class AuthorEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public AuthorEntity() {}
+    public CategoryEntity() {}
 
-    public AuthorEntity(Long id, String name) {
+    public CategoryEntity(Long id, String name) {
         this.id = id;
         this.name = name;
     }

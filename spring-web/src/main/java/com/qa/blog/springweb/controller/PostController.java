@@ -1,10 +1,14 @@
-package com.qa.blog.springweb;
+package com.qa.blog.springweb.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flipkart.zjsonpatch.JsonPatch;
-import com.qa.blog.core.*;
+import com.qa.blog.core.domain.Post;
+import com.qa.blog.core.usecase.*;
+import com.qa.blog.springweb.dto.PostDTO;
+import com.qa.blog.springweb.dto.PostRequest;
+import com.qa.blog.springweb.mapper.PostWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
