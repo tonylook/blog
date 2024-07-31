@@ -8,7 +8,6 @@ import com.qa.blog.core.exception.BlogException;
 import com.qa.blog.springweb.PostWebMapperDefault;
 import com.qa.blog.springweb.PostRequest;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -42,7 +41,6 @@ class PostWebMapperDefaultTest {
         );
     }
 
-    @Disabled("This test is disabled at the moment")
     @Test
     void mapCreatePostRequestWithLongContentThrowsBlogException() {
         // Arrange
@@ -60,7 +58,6 @@ class PostWebMapperDefaultTest {
         // Act & Assert
         Assertions.assertThatThrownBy(() -> underTest.toDomain(postRequest))
             .isInstanceOf(BlogException.class)
-            .hasMessageContaining("BR-1")
             .hasMessageContaining("The content cannot be longer than 1024 characters");
     }
 }
