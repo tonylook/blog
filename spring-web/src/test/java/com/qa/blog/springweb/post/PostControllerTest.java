@@ -1,11 +1,15 @@
 package com.qa.blog.springweb.post;
 
-import com.qa.blog.core.*;
+import com.qa.blog.core.domain.Author;
+import com.qa.blog.core.domain.Category;
+import com.qa.blog.core.domain.Post;
+import com.qa.blog.core.domain.Tag;
 import com.qa.blog.core.exception.BlogException;
-import com.qa.blog.springweb.PostController;
-import com.qa.blog.springweb.PostRequest;
-import com.qa.blog.springweb.PostWebMapper;
-import com.qa.blog.springweb.PostDTO;
+import com.qa.blog.core.usecase.*;
+import com.qa.blog.springweb.controller.PostController;
+import com.qa.blog.springweb.dto.PostRequest;
+import com.qa.blog.springweb.dto.PostDTO;
+import com.qa.blog.springweb.mapper.PostWebMapper;
 import com.qa.blog.springweb.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;

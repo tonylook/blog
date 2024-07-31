@@ -1,6 +1,6 @@
 package com.qa.blog.application.steps;
 
-import com.qa.blog.mariadb.PostEntity;
+import com.qa.blog.mariadb.entity.PostEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
