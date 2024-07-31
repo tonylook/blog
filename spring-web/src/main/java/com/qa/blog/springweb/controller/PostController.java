@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flipkart.zjsonpatch.JsonPatch;
+import com.qa.blog.core.domain.Author;
+import com.qa.blog.core.domain.Category;
 import com.qa.blog.core.domain.Post;
+import com.qa.blog.core.domain.Tag;
 import com.qa.blog.core.usecase.*;
 import com.qa.blog.springweb.dto.PostDTO;
 import com.qa.blog.springweb.dto.PostRequest;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/post")
@@ -89,7 +94,45 @@ public class PostController {
         JsonNode postNode = objectMapper.valueToTree(existingPostToPatch);
         JsonNode patchedNode = JsonPatch.apply(patch, postNode);
         PostDTO patchedPostDTO = objectMapper.treeToValue(patchedNode, PostDTO.class);
-        return postWebMapper.toDomain(patchedPostDTO);
+        Post patchedPostDomain = postWebMapper.toDomain(patchedPostDTO);
+        return patchedPostWithIds(existingPost, patchedPostDomain) ;
+    }
+
+    private Post patchedPostWithIds(Post existingPost, Post patchedPostDomain) {
+        Category category;
+        Author author;
+        if(existingPost.category().name().equals(patchedPostDomain.category().name())) {
+            category = new Category(existingPost.category().id(), patchedPostDomain.category().name());
+
+        }else{
+            category = new Category(null, patchedPostDomain.category().name());
+        }
+        if(existingPost.author().name().equals(patchedPostDomain.author().name())) {
+             author = new Author(existingPost.author().id(), patchedPostDomain.author().name());
+        }else{
+             author = new Author(null, patchedPostDomain.author().name());
+        }
+        Set<Tag> tags = patchedPostDomain.tags().stream().map(tag -> {
+            Tag existingTag = existingPost.tags().stream()
+                .filter(t -> t.name().equals(tag.name()))
+                .findFirst()
+                .orElse(null);
+            if (existingTag != null) {
+                return new Tag(existingTag.id(), tag.name());
+            } else {
+                return new Tag(null, tag.name());
+            }
+        }).collect(Collectors.toSet());
+
+        return new Post(
+            existingPost.id(),
+            author,
+            category,
+            tags,
+            patchedPostDomain.title(),
+            patchedPostDomain.content(),
+            patchedPostDomain.image()
+        );
     }
 
 }
