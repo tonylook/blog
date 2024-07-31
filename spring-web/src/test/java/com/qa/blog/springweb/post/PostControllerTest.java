@@ -23,7 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -61,9 +63,10 @@ class PostControllerTest {
         var postDomain = new Post(42L,
             new Author(41L, "Antonio Alvino"),
             new Category(33L, "Tech"),
-            new ArrayList<>(List.of(
+            new HashSet<>(Set.of(
                 new Tag(1L, "Java"),
-                new Tag(2L, "Programming"))),
+                new Tag(2L, "Programming"))) {
+            },
             "Titolo",
             "Contenuto 123 Prova",
             "http://example.com/image.jpg");

@@ -3,11 +3,12 @@ package com.qa.blog.core.domain;
 import com.qa.blog.core.exception.BlogErrorCode;
 import com.qa.blog.core.exception.BlogException;
 
-import java.util.List;
+import java.util.Set;
+
 public record Post(Long id,
                    Author author,
                    Category category,
-                   List<Tag> tags,
+                   Set<Tag> tags,
                    String title,
                    String content,
                    String image) {

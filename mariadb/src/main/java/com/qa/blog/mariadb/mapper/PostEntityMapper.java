@@ -10,6 +10,7 @@ import com.qa.blog.mariadb.entity.PostEntity;
 import com.qa.blog.mariadb.entity.TagEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,9 +19,9 @@ public class PostEntityMapper {
     public Post toDomain(PostEntity entity) {
         Author author = new Author(entity.getAuthor().getId(), entity.getAuthor().getName());
         Category category = new Category(entity.getCategory().getId(), entity.getCategory().getName());
-        List<Tag> tags = entity.getTags().stream()
+        Set<Tag> tags = entity.getTags().stream()
             .map(tagEntityEntity -> new Tag(tagEntityEntity.getId(), tagEntityEntity.getName()))
-            .toList();
+            .collect(Collectors.toSet());
 
         return new Post(
             entity.getId(),

@@ -10,15 +10,17 @@ import com.qa.blog.core.domain.Post;
 import com.qa.blog.core.domain.Tag;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class PostWebMapper {
     public Post toDomain(PostRequest request) throws BlogException {
         Author author = new Author(null, request.author());
         Category category = new Category(null, request.category());
-        List<Tag> tags = request.tags().stream()
+        Set<Tag> tags = request.tags().stream()
             .map(tag -> new Tag(null, tag))
-            .toList();
+            .collect(Collectors.toSet());
             return new Post(
                 null,
                 author,
@@ -33,9 +35,9 @@ public class PostWebMapper {
     public Post toDomain(PostDTO postDTO) throws BlogException {
         Author author = new Author(null, postDTO.author());
         Category category = new Category(null, postDTO.category());
-        List<Tag> tags = postDTO.tags().stream()
+        Set<Tag> tags = postDTO.tags().stream()
             .map(tag -> new Tag(null, tag))
-            .toList();
+            .collect(Collectors.toSet());
         return new Post(
             postDTO.id(),
             author,
