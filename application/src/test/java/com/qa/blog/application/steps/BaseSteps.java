@@ -1,7 +1,7 @@
 package com.qa.blog.application.steps;
 
 import com.qa.blog.application.ContainerBase;
-import com.qa.blog.mariadb.JPAPostRepository;
+import com.qa.blog.mariadb.repository.JPAPostRepository;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

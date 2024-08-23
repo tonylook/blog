@@ -1,5 +1,7 @@
 package com.qa.blog.core;
 
+import com.qa.blog.core.domain.Post;
+
 import java.util.List;
 
 public interface PostRepository {

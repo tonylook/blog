@@ -1,10 +1,10 @@
 package com.qa.blog.application.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qa.blog.mariadb.AuthorEntity;
-import com.qa.blog.mariadb.CategoryEntity;
-import com.qa.blog.mariadb.PostEntity;
-import com.qa.blog.mariadb.TagEntity;
+import com.qa.blog.mariadb.entity.AuthorEntity;
+import com.qa.blog.mariadb.entity.CategoryEntity;
+import com.qa.blog.mariadb.entity.PostEntity;
+import com.qa.blog.mariadb.entity.TagEntity;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;

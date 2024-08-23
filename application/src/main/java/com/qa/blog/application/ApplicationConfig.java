@@ -1,6 +1,7 @@
 package com.qa.blog.application;
 
 import com.qa.blog.core.*;
+import com.qa.blog.core.usecase.*;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;

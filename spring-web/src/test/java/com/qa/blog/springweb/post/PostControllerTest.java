@@ -1,11 +1,15 @@
 package com.qa.blog.springweb.post;
 
-import com.qa.blog.core.*;
+import com.qa.blog.core.domain.Author;
+import com.qa.blog.core.domain.Category;
+import com.qa.blog.core.domain.Post;
+import com.qa.blog.core.domain.Tag;
 import com.qa.blog.core.exception.BlogException;
-import com.qa.blog.springweb.PostController;
-import com.qa.blog.springweb.PostRequest;
-import com.qa.blog.springweb.PostWebMapper;
-import com.qa.blog.springweb.PostDTO;
+import com.qa.blog.core.usecase.*;
+import com.qa.blog.springweb.controller.PostController;
+import com.qa.blog.springweb.dto.PostRequest;
+import com.qa.blog.springweb.dto.PostDTO;
+import com.qa.blog.springweb.mapper.PostWebMapper;
 import com.qa.blog.springweb.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -19,7 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -57,9 +63,10 @@ class PostControllerTest {
         var postDomain = new Post(42L,
             new Author(41L, "Antonio Alvino"),
             new Category(33L, "Tech"),
-            new ArrayList<>(List.of(
+            new HashSet<>(Set.of(
                 new Tag(1L, "Java"),
-                new Tag(2L, "Programming"))),
+                new Tag(2L, "Programming"))) {
+            },
             "Titolo",
             "Contenuto 123 Prova",
             "http://example.com/image.jpg");
